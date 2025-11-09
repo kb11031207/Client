@@ -1,24 +1,70 @@
 import './style.css'
-import typescriptLogo from './typescript.svg'
-import viteLogo from '/vite.svg'
-import { setupCounter } from './counter.ts'
+import { router } from './utils/router'
+import { authService } from './services/auth.service'
+import { renderLoginPage } from './pages/LoginPage'
+import { renderRegisterPage } from './pages/RegisterPage'
+import { renderDashboardPage } from './pages/DashboardPage'
+import { renderSquadPage } from './pages/SquadPage'
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-  <div>
-    <a href="https://vite.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://www.typescriptlang.org/" target="_blank">
-      <img src="${typescriptLogo}" class="logo vanilla" alt="TypeScript logo" />
-    </a>
-    <h1>Vite + TypeScript</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite and TypeScript logos to learn more
-    </p>
-  </div>
-`
+/**
+ * Main Application Entry Point
+ * 
+ * Sets up routing and initializes the application.
+ */
 
-setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
+// Register routes
+router.register('/login', () => {
+  renderLoginPage()
+})
+
+router.register('/register', () => {
+  renderRegisterPage()
+})
+
+router.register('/dashboard', () => {
+  renderDashboardPage()
+})
+
+// Squad page route - handle with gameweek ID parameter
+router.register('/squad', () => {
+  const route = router.getCurrentRoute()
+  // Check if route has gameweek ID: /squad/1, /squad/2, etc.
+  const match = route.match(/^\/squad\/(\d+)$/)
+  const gameweekId = match ? parseInt(match[1]) : undefined
+  renderSquadPage(gameweekId)
+})
+
+// Default route - redirect to login or dashboard based on auth status
+router.register('/', () => {
+  if (authService.isAuthenticated()) {
+    router.navigate('/dashboard')
+  } else {
+    router.navigate('/login')
+  }
+})
+
+// Initialize routing after DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => {
+    initializeApp()
+  })
+} else {
+  // DOM is already ready
+  initializeApp()
+}
+
+function initializeApp() {
+  const currentRoute = router.getCurrentRoute()
+  
+  // If no route or root route, navigate based on auth status
+  if (!currentRoute || currentRoute === '/') {
+    if (authService.isAuthenticated()) {
+      router.navigate('/dashboard')
+    } else {
+      router.navigate('/login')
+    }
+  } else {
+    // Route exists - handle it
+    router.init()
+  }
+}
