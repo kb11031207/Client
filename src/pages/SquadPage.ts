@@ -6,6 +6,7 @@ import type { PlayerDto } from '../services/player.service';
 import { squadService } from '../services/squad.service';
 import { validateSquad, getPositionName } from '../utils/squad-validator';
 import { renderPlayerCard } from '../components/PlayerCard';
+import { showPlayerStatsModal } from '../components/PlayerStatsModal';
 
 /**
  * Squad Builder Page
@@ -272,6 +273,8 @@ function renderSquadBuilder() {
                       isViceCaptain: isVice,
                       showRemoveButton: true,
                       onRemove: () => removePlayerFromSquad(player.id),
+                      onViewStats: () => showPlayerStatsModal(player, squadState.gameweekId),
+                      showStatsButton: true,
                     });
                   }).join('')}
                 </div>
@@ -434,6 +437,15 @@ function attachSquadBuilderEvents() {
     const player = allPlayers.find(p => p.id === playerId);
     const isInSquad = squadState.players.some(p => p.id === playerId);
     
+    // Handle view stats button clicks
+    const statsButton = card.querySelector(`[data-view-stats-player-id="${playerId}"]`) as HTMLButtonElement;
+    if (statsButton && player) {
+      statsButton.addEventListener('click', (e) => {
+        e.stopPropagation();
+        showPlayerStatsModal(player, squadState.gameweekId);
+      });
+    }
+    
     // Only attach click handler for players not in squad
     if (player && !isInSquad) {
       card.addEventListener('click', () => addPlayerToSquad(player));
@@ -442,8 +454,9 @@ function attachSquadBuilderEvents() {
     // Squad players can be clicked to add to starters
     if (player && isInSquad) {
       card.addEventListener('click', (e) => {
-        // Don't trigger if clicking on remove button
-        if ((e.target as HTMLElement).closest('[data-remove-player-id]')) {
+        // Don't trigger if clicking on remove button or stats button
+        if ((e.target as HTMLElement).closest('[data-remove-player-id]') || 
+            (e.target as HTMLElement).closest('[data-view-stats-player-id]')) {
           return;
         }
         const isStarter = squadState.starterIds.includes(playerId);
@@ -564,6 +577,8 @@ function renderPlayerList() {
         player,
         isInSquad,
         onClick: isInSquad ? undefined : () => addPlayerToSquad(player),
+        onViewStats: () => showPlayerStatsModal(player, squadState.gameweekId),
+        showStatsButton: true,
       });
     }).join('') || '<p class="text-secondary text-center">No players found matching your filters.</p>';
 
@@ -581,12 +596,23 @@ function attachPlayerCardListeners() {
     const player = allPlayers.find(p => p.id === playerId);
     const isInSquad = squadState.players.some(p => p.id === playerId);
     
+    // Handle view stats button clicks
+    const statsButton = card.querySelector(`[data-view-stats-player-id="${playerId}"]`) as HTMLButtonElement;
+    if (statsButton && player) {
+      statsButton.addEventListener('click', (e) => {
+        e.stopPropagation();
+        showPlayerStatsModal(player, squadState.gameweekId);
+      });
+    }
+    
     if (player && !isInSquad) {
       card.addEventListener('click', () => addPlayerToSquad(player));
     } else if (player && isInSquad) {
       // Squad players can be clicked to add to starters
       card.addEventListener('click', (e) => {
-        if ((e.target as HTMLElement).closest('[data-remove-player-id]')) {
+        // Don't trigger if clicking on remove button or stats button
+        if ((e.target as HTMLElement).closest('[data-remove-player-id]') || 
+            (e.target as HTMLElement).closest('[data-view-stats-player-id]')) {
           return;
         }
         const isStarter = squadState.starterIds.includes(playerId);

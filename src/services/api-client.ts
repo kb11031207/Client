@@ -46,14 +46,21 @@ class ApiClient {
       }
     }
     
-    if (!response.ok) {
-      const error = await response.json().catch(() => ({ error: 'Request failed' }));
-      throw new Error(error.error || error.message || `HTTP ${response.status}`);
-    }
-    
-    // Handle empty responses (204 No Content)
+    // Handle empty responses (204 No Content) before checking ok status
     if (response.status === 204) {
       return null;
+    }
+    
+    if (!response.ok) {
+      let errorMessage = `HTTP ${response.status}`;
+      try {
+        const error = await response.json();
+        errorMessage = error.error || error.message || error.detail || errorMessage;
+      } catch {
+        // If response is not JSON, use status text or default message
+        errorMessage = response.statusText || errorMessage;
+      }
+      throw new Error(errorMessage);
     }
     
     return response.json();

@@ -5,6 +5,10 @@ import { renderLoginPage } from './pages/LoginPage'
 import { renderRegisterPage } from './pages/RegisterPage'
 import { renderDashboardPage } from './pages/DashboardPage'
 import { renderSquadPage } from './pages/SquadPage'
+import { renderLeaguesPage } from './pages/LeaguesPage'
+import { renderLeagueDetailsPage } from './pages/LeagueDetailsPage'
+import { renderPlayersPage } from './pages/PlayersPage'
+import { renderPlayerDetailsPage } from './pages/PlayerDetailsPage'
 
 /**
  * Main Application Entry Point
@@ -32,6 +36,30 @@ router.register('/squad', () => {
   const match = route.match(/^\/squad\/(\d+)$/)
   const gameweekId = match ? parseInt(match[1]) : undefined
   renderSquadPage(gameweekId)
+})
+
+router.register('/leagues', () => {
+  const route = router.getCurrentRoute()
+  // Check if route has league ID: /leagues/1, /leagues/2, etc.
+  const match = route.match(/^\/leagues\/(\d+)$/)
+  if (match) {
+    const leagueId = parseInt(match[1])
+    renderLeagueDetailsPage(leagueId)
+  } else {
+    renderLeaguesPage()
+  }
+})
+
+router.register('/players', () => {
+  const route = router.getCurrentRoute()
+  // Check if route has player ID: /players/1, /players/2, etc.
+  const match = route.match(/^\/players\/(\d+)$/)
+  if (match) {
+    const playerId = parseInt(match[1])
+    renderPlayerDetailsPage(playerId)
+  } else {
+    renderPlayersPage()
+  }
 })
 
 // Default route - redirect to login or dashboard based on auth status

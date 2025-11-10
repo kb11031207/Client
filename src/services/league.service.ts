@@ -75,7 +75,7 @@ export class LeagueService {
    * @param userId User ID
    */
   async joinLeague(leagueId: number, userId: number) {
-    return apiClient.post(`/api/Leagues/${leagueId}/join/${userId}`);
+    return apiClient.post(`/api/Leagues/${leagueId}/join/${userId}`, {});
   }
   
   /**
@@ -84,7 +84,7 @@ export class LeagueService {
    * @param userId User ID
    */
   async leaveLeague(leagueId: number, userId: number) {
-    return apiClient.post(`/api/Leagues/${leagueId}/leave/${userId}`);
+    return apiClient.post(`/api/Leagues/${leagueId}/leave/${userId}`, {});
   }
   
   /**
@@ -95,6 +95,15 @@ export class LeagueService {
    */
   async getStandings(leagueId: number, gameweekId: number) {
     return apiClient.get(`/api/Leagues/${leagueId}/standings/gameweek/${gameweekId}`);
+  }
+
+  /**
+   * Kick/remove a member from league (only owner can do this)
+   * @param leagueId League ID
+   * @param userId User ID to kick
+   */
+  async kickMember(leagueId: number, userId: number) {
+    return apiClient.post(`/api/Leagues/${leagueId}/kick/${userId}`, {});
   }
 }
 

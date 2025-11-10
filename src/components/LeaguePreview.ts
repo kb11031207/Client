@@ -68,7 +68,7 @@ export function renderLeaguesPreview(leagues: LeagueDto[]): string {
                   League #${league.id}
                 </div>
                 <div class="text-secondary" style="font-size: var(--font-size-sm);">
-                  ${league.typeDisplay || (league.type ? 'Private' : 'Public')} • ${league.memberCount} member${league.memberCount !== 1 ? 's' : ''}
+                  ${league.typeDisplay || (league.type ? 'Public' : 'Private')} • ${league.memberCount} member${league.memberCount !== 1 ? 's' : ''}
                 </div>
                 ${league.ownerUsername ? `
                   <div class="text-secondary" style="font-size: var(--font-size-sm);">

@@ -33,9 +33,14 @@ export async function renderDashboardPage() {
     <div class="container">
       <div class="flex flex-between flex-center mb-xl">
         <h1 class="mt-0 mb-0">Dashboard</h1>
-        <button id="logout-button" class="btn btn-danger btn-sm">
-          Logout
-        </button>
+        <div class="flex gap-sm">
+          <a href="#/players" class="btn btn-secondary btn-sm">
+            Browse Players
+          </a>
+          <button id="logout-button" class="btn btn-danger btn-sm">
+            Logout
+          </button>
+        </div>
       </div>
       <div id="loading" class="text-center p-2xl">
         <p>Loading dashboard...</p>

@@ -15,7 +15,9 @@ export interface PlayerCardProps {
   isViceCaptain?: boolean;
   onClick?: (player: PlayerDto) => void;
   onRemove?: (player: PlayerDto) => void;
+  onViewStats?: (player: PlayerDto) => void;
   showRemoveButton?: boolean;
+  showStatsButton?: boolean;
 }
 
 /**
@@ -32,7 +34,9 @@ export function renderPlayerCard(props: PlayerCardProps): string {
     isViceCaptain = false, 
     onClick,
     onRemove,
-    showRemoveButton = false
+    onViewStats,
+    showRemoveButton = false,
+    showStatsButton = false
   } = props;
   
   const cardClasses = [
@@ -47,8 +51,11 @@ export function renderPlayerCard(props: PlayerCardProps): string {
   if (isViceCaptain) badges.push('<span class="badge badge-vice">V</span>');
   if (isStarter) badges.push('<span class="badge badge-starter">ST</span>');
   
+  // Add cursor pointer if card is clickable (either has onClick prop or will have click listener)
+  const cursorStyle = (onClick && !isInSquad) || (!isInSquad && !showRemoveButton) ? 'cursor: pointer;' : '';
+  
   return `
-    <div class="${cardClasses}" data-player-id="${player.id}" ${onClick && !isInSquad ? 'style="cursor: pointer;"' : ''}>
+    <div class="${cardClasses}" data-player-id="${player.id}" ${cursorStyle ? `style="${cursorStyle}"` : ''}>
       <div class="flex flex-between flex-center">
         <div class="flex flex-center gap-sm" style="flex: 1;">
           ${player.pictureUrl ? `
@@ -70,12 +77,24 @@ export function renderPlayerCard(props: PlayerCardProps): string {
           <div style="font-weight: var(--font-weight-semibold);">
             £${player.cost.toFixed(1)}m
           </div>
+          ${showStatsButton && onViewStats ? `
+            <button 
+              class="btn btn-secondary btn-sm" 
+              data-view-stats-player-id="${player.id}"
+              style="margin-left: var(--spacing-xs); min-width: 28px; padding: 4px 8px; font-size: 0.9em; line-height: 1;"
+              title="View player stats"
+              onclick="event.stopPropagation();"
+            >
+              ℹ️
+            </button>
+          ` : ''}
           ${showRemoveButton && onRemove ? `
             <button 
               class="btn btn-danger btn-sm" 
               data-remove-player-id="${player.id}"
               style="margin-left: var(--spacing-xs); min-width: 28px; padding: 2px 8px; font-size: 1.2em; line-height: 1;"
               title="Remove from squad"
+              onclick="event.stopPropagation();"
             >
               ×
             </button>
