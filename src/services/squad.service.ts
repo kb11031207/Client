@@ -5,6 +5,29 @@ import { apiClient } from './api-client';
  * 
  * Handles all API calls related to squads.
  */
+
+// Squad DTOs (matching backend API responses)
+export interface SquadPlayerDto {
+  id: number
+  playerId: number
+  position: number
+  isStarter?: boolean
+  isCaptain?: boolean
+  isVice?: boolean
+  [key: string]: unknown
+}
+
+export interface SquadDto {
+  id: number
+  userId: number
+  gameweekId: number
+  players: SquadPlayerDto[]
+  captainId?: number
+  viceCaptainId?: number
+  totalCost?: number
+  totalPoints?: number
+}
+
 export class SquadService {
   /**
    * Get all squads for a user
@@ -40,7 +63,7 @@ export class SquadService {
    * @param squadData CreateSquadDto
    * @returns SquadDto
    */
-  async createSquad(userId: number, squadData: any) {
+  async createSquad(userId: number, squadData: Record<string, unknown>) {
     return apiClient.post(`/api/Squads/user/${userId}`, squadData);
   }
   
@@ -50,7 +73,7 @@ export class SquadService {
    * @param squadData UpdateSquadDto
    * @returns SquadDto
    */
-  async updateSquad(id: number, squadData: any) {
+  async updateSquad(id: number, squadData: Record<string, unknown>) {
     return apiClient.put(`/api/Squads/${id}`, squadData);
   }
   

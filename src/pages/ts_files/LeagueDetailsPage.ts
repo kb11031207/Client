@@ -1,7 +1,7 @@
-import { authService } from '../services/auth.service';
-import { router } from '../utils/router';
-import { leagueService } from '../services/league.service';
-import { gameweekService } from '../services/gameweek.service';
+import { authService } from '../../services/auth.service';
+import { router } from '../../utils/router';
+import { leagueService } from '../../services/league.service';
+import { gameweekService } from '../../services/gameweek.service';
 
 /**
  * League Details Page

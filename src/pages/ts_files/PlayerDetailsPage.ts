@@ -1,8 +1,8 @@
-import { authService } from '../services/auth.service';
-import { router } from '../utils/router';
-import { playerService, type PlayerDto } from '../services/player.service';
-import { gameweekService } from '../services/gameweek.service';
-import { getPositionName, getPositionAbbr } from '../utils/squad-validator';
+import { authService } from '../../services/auth.service';
+import { router } from '../../utils/router';
+import { playerService, type PlayerDto } from '../../services/player.service';
+import { gameweekService } from '../../services/gameweek.service';
+import { getPositionName, getPositionAbbr } from '../../utils/squad-validator';
 
 /**
  * Player Details Page

@@ -17,7 +17,7 @@ class ApiClient {
   private baseUrl = 'https://localhost:7010';
   private isRefreshing = false;
   
-  async request(endpoint: string, options: RequestInit = {}): Promise<any> {
+  async request<T = unknown>(endpoint: string, options: RequestInit = {}): Promise<T> {
     const token = storage.getAccessToken();
     const headers = {
       'Content-Type': 'application/json',
@@ -31,7 +31,14 @@ class ApiClient {
     });
     
     // Handle 401 Unauthorized - try to refresh token
-    if (response.status === 401 && !this.isRefreshing) {
+    // BUT: Skip token refresh for login/register endpoints (they don't have tokens)
+    const isAuthEndpoint = endpoint.includes('/Users/login') || 
+                          endpoint.includes('/Users/register') ||
+                          endpoint.includes('/users/login') ||
+                          endpoint.includes('/users/register');
+    
+    if (response.status === 401 && !this.isRefreshing && !isAuthEndpoint && token) {
+      // Only try to refresh if we have a token and it's not an auth endpoint
       try {
         await this.refreshToken();
         // Retry the original request with new token
@@ -48,22 +55,40 @@ class ApiClient {
     
     // Handle empty responses (204 No Content) before checking ok status
     if (response.status === 204) {
-      return null;
+      return null as T;
     }
     
     if (!response.ok) {
       let errorMessage = `HTTP ${response.status}`;
       try {
         const error = await response.json();
-        errorMessage = error.error || error.message || error.detail || errorMessage;
+        // Try multiple possible error message fields
+        errorMessage = error.error || 
+                      error.message || 
+                      error.detail || 
+                      error.title ||
+                      (Array.isArray(error.errors) ? error.errors.join(', ') : null) ||
+                      errorMessage;
       } catch {
         // If response is not JSON, use status text or default message
         errorMessage = response.statusText || errorMessage;
       }
+      
+      // Provide user-friendly messages for common status codes
+      if (response.status === 401 && isAuthEndpoint) {
+        errorMessage = errorMessage.includes('HTTP') 
+          ? 'Invalid email or password. Please try again.' 
+          : errorMessage;
+      } else if (response.status === 400) {
+        errorMessage = errorMessage.includes('HTTP') 
+          ? 'Invalid request. Please check your input.' 
+          : errorMessage;
+      }
+      
       throw new Error(errorMessage);
     }
     
-    return response.json();
+    return response.json() as T;
   }
   
   async refreshToken() {
@@ -102,26 +127,26 @@ class ApiClient {
     }
   }
   
-  get(endpoint: string) {
-    return this.request(endpoint, { method: 'GET' });
+  get<T = unknown>(endpoint: string) {
+    return this.request<T>(endpoint, { method: 'GET' });
   }
   
-  post(endpoint: string, data: any) {
-    return this.request(endpoint, {
+  post<T = unknown>(endpoint: string, data: unknown) {
+    return this.request<T>(endpoint, {
       method: 'POST',
       body: JSON.stringify(data),
     });
   }
   
-  put(endpoint: string, data: any) {
-    return this.request(endpoint, {
+  put<T = unknown>(endpoint: string, data: unknown) {
+    return this.request<T>(endpoint, {
       method: 'PUT',
       body: JSON.stringify(data),
     });
   }
   
-  delete(endpoint: string) {
-    return this.request(endpoint, { method: 'DELETE' });
+  delete<T = unknown>(endpoint: string) {
+    return this.request<T>(endpoint, { method: 'DELETE' });
   }
 }
 

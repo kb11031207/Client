@@ -5,6 +5,17 @@ import { apiClient } from './api-client';
  * 
  * Handles all API calls related to gameweeks.
  */
+
+// Gameweek DTOs (matching backend API responses)
+export interface GameweekDto {
+  id: number
+  number: number
+  startDate: string
+  endDate: string
+  isCurrent?: boolean
+  isComplete?: boolean
+}
+
 export class GameweekService {
   /**
    * Get the current gameweek

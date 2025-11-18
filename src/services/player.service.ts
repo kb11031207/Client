@@ -19,11 +19,71 @@ export interface PlayerDto {
   pictureUrl?: string | null;
 }
 
+// Stats summary interface (matches backend)
+export interface PlayerStatsSummaryDto {
+  totalPoints: number;
+  totalGoals: number;
+  totalAssists: number;
+  totalCleanSheets: number;
+  totalSaves: number;
+  gamesPlayed: number;
+}
+
+// Player with stats (matches backend response)
+export interface PlayerWithStatsDto extends PlayerDto {
+  stats: PlayerStatsSummaryDto | null;  // null if includeStats is false
+}
+
+// Extended filter interface (matches backend)
 export interface PlayerFilterDto {
   teamId?: number | null;
   position?: number | null;
   minCost?: number | null;
   maxCost?: number | null;
+  // Performance filtering options
+  gameweekId?: number | null;
+  sortBy?: string | null;  // "points" | "goals" | "assists" | "cleanSheets" | "saves" | "cost" | "name"
+  sortOrder?: 'asc' | 'desc' | null;
+  includeStats?: boolean;
+}
+
+// Player stats interfaces (matching backend API responses)
+export interface PlayerFixtureStatsDto {
+  fixtureId: number
+  homeTeamName?: string | null
+  awayTeamName?: string | null
+  homeScore: number
+  awayScore: number
+  kickoff: string
+  minutesPlayed: number
+  goals: number
+  assists: number
+  cleanSheet: boolean
+  goalsConceded: number
+  yellowCards: number
+  redCards: number
+  saves: number
+  shots: number
+  shotsOnGoal: number
+  pointsEarned: number
+}
+
+export interface PlayerStatsDto {
+  playerId: number
+  playerName?: string | null
+  gameweekId: number
+  minutesPlayed: number
+  goals: number
+  assists: number
+  cleanSheet: boolean
+  goalsConceded: number
+  yellowCards: number
+  redCards: number
+  saves: number
+  shots: number
+  shotsOnGoal: number
+  pointsEarned: number
+  fixtures?: PlayerFixtureStatsDto[] | null
 }
 
 /**
@@ -68,9 +128,9 @@ export class PlayerService {
   /**
    * Search players with filters
    * @param filters PlayerFilterDto
-   * @returns Array of PlayerDto
+   * @returns Array of PlayerWithStatsDto (stats may be null if includeStats is false)
    */
-  async searchPlayers(filters: PlayerFilterDto): Promise<PlayerDto[]> {
+  async searchPlayers(filters: PlayerFilterDto): Promise<PlayerWithStatsDto[]> {
     return apiClient.post('/api/Players/search', filters);
   }
   
@@ -80,8 +140,8 @@ export class PlayerService {
    * @param gameweekId Gameweek ID
    * @returns PlayerStatsDto
    */
-  async getPlayerStats(playerId: number, gameweekId: number) {
-    return apiClient.get(`/api/Players/${playerId}/gameweek/${gameweekId}/stats`);
+  async getPlayerStats(playerId: number, gameweekId: number): Promise<PlayerStatsDto> {
+    return apiClient.get(`/api/Players/${playerId}/gameweek/${gameweekId}/stats`) as Promise<PlayerStatsDto>;
   }
 }
 

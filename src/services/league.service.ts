@@ -5,6 +5,38 @@ import { apiClient } from './api-client';
  * 
  * Handles all API calls related to leagues.
  */
+
+// League DTOs (matching backend API responses)
+export interface LeagueDto {
+  id: number
+  owner: number
+  ownerUsername?: string | null
+  type: boolean // true = public, false = private (backend convention)
+  typeDisplay?: string | null
+  memberCount: number
+}
+
+export interface LeagueMemberDto {
+  userId: number
+  username?: string | null
+  school?: string | null
+}
+
+export interface LeagueDetailsDto {
+  id: number
+  owner: number
+  ownerUsername?: string | null
+  type: boolean // true = public, false = private (backend convention)
+  members?: LeagueMemberDto[] | null
+}
+
+export interface StandingsEntry {
+  rank: number
+  userId: number
+  username?: string | null
+  totalPoints: number
+}
+
 export class LeagueService {
   /**
    * Get all leagues for a user
@@ -47,7 +79,7 @@ export class LeagueService {
    * @param leagueData CreateLeagueDto
    * @returns LeagueDto
    */
-  async createLeague(userId: number, leagueData: any) {
+  async createLeague(userId: number, leagueData: Record<string, unknown>) {
     return apiClient.post(`/api/Leagues/user/${userId}`, leagueData);
   }
   
@@ -57,7 +89,7 @@ export class LeagueService {
    * @param leagueData UpdateLeagueDto
    * @returns LeagueDto
    */
-  async updateLeague(id: number, leagueData: any) {
+  async updateLeague(id: number, leagueData: Record<string, unknown>) {
     return apiClient.put(`/api/Leagues/${id}`, leagueData);
   }
   

@@ -17,7 +17,7 @@ export class AuthService {
    * @returns AuthResponseDto with user data and tokens
    */
   async login(email: string, password: string) {
-    const data = await apiClient.post('/api/Users/login', { email, password });
+    const data = await apiClient.post<{ accessToken: string; refreshToken: string; id: number; username: string; email: string }>('/api/Users/login', { email, password });
     
     // Store tokens and user ID
     if (data.accessToken) {
