@@ -105,9 +105,25 @@ export function FixturesPage() {
   }
 
   const formatGameweekLabel = (gameweek: { id: number; number?: number; startDate: string; isCurrent?: boolean }) => {
-    const date = new Date(gameweek.startDate)
-    const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
     const gameweekNumber = gameweek.number || gameweek.id
+    
+    // Validate and format the date
+    let dateStr = ''
+    if (gameweek.startDate) {
+      const date = new Date(gameweek.startDate)
+      // Check if the date is valid
+      if (!isNaN(date.getTime())) {
+        dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+      }
+    }
+    
+    // If date is invalid or missing, just show the gameweek number
+    if (!dateStr) {
+      return gameweek.isCurrent 
+        ? `Gameweek ${gameweekNumber} (Current)`
+        : `Gameweek ${gameweekNumber}`
+    }
+    
     return gameweek.isCurrent 
       ? `Gameweek ${gameweekNumber} (Current) - ${dateStr}`
       : `Gameweek ${gameweekNumber} - ${dateStr}`

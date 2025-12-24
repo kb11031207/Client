@@ -81,7 +81,17 @@ class ApiClient {
       
       // Provide user-friendly messages for common status codes
       if (response.status === 404) {
-        errorMessage = 'Season has ended';
+        // Only show "Season has ended" for specific endpoints, not for player stats
+        // Player stats 404s should pass through so they can be handled as "no stats available"
+        const isPlayerStatsEndpoint = endpoint.includes('/stats');
+        if (!isPlayerStatsEndpoint) {
+          errorMessage = 'Season has ended';
+        } else {
+          // For player stats endpoints, ensure the error message includes "404" so playerSlice can detect it
+          if (!errorMessage.toLowerCase().includes('404') && !errorMessage.toLowerCase().includes('not found')) {
+            errorMessage = `HTTP 404: ${errorMessage}`;
+          }
+        }
       } else if (response.status === 401 && isAuthEndpoint) {
         errorMessage = errorMessage.includes('HTTP') 
           ? 'Invalid email or password. Please try again.' 

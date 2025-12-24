@@ -13,6 +13,7 @@ import { DashboardPage } from './pages/DashboardPage'
 import { PlayersPage } from './pages/PlayersPage'
 import { PlayerDetailsPage } from './pages/PlayerDetailsPage'
 import { FixturesPage } from './pages/FixturesPage'
+import { AboutPage } from './pages/AboutPage'
 import { SquadPage } from './pages/SquadPage'
 import { LeaguesPage } from './pages/LeaguesPage'
 import { LeagueDetailsPage } from './pages/LeagueDetailsPage'
@@ -41,6 +42,7 @@ function AppRoutes() {
       <Route path="/players" element={<PlayersPage />} />
       <Route path="/players/:playerId" element={<PlayerDetailsPage />} />
       <Route path="/fixtures" element={<FixturesPage />} />
+      <Route path="/about" element={<AboutPage />} />
       
       {/* Protected routes */}
       <Route
