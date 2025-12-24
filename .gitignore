@@ -71,3 +71,5 @@ docs/*.md
 *.njsproj
 *.sln
 *.sw?
+.whodare/stats.json
+docs/swagger.json

@@ -12,9 +12,14 @@ import { storage } from '../utils/storage';
  * - FRONTEND_INTEGRATION_GUIDE shows: /api/users/... (lowercase u)
  * - ASP.NET Core routing is case-insensitive, so both should work
  * - Using capital U to match swagger.json specification
+ * 
+ * Network Access:
+ * - Set VITE_API_BASE_URL environment variable to your backend server's network IP
+ * - Example: VITE_API_BASE_URL=https://192.168.1.100:7010
+ * - Defaults to https://localhost:7010 for local development
  */
 class ApiClient {
-  private baseUrl = 'https://localhost:7010';
+  private baseUrl = import.meta.env.VITE_API_BASE_URL || 'https://localhost:7010';
   private isRefreshing = false;
   
   async request<T = unknown>(endpoint: string, options: RequestInit = {}): Promise<T> {
@@ -75,7 +80,9 @@ class ApiClient {
       }
       
       // Provide user-friendly messages for common status codes
-      if (response.status === 401 && isAuthEndpoint) {
+      if (response.status === 404) {
+        errorMessage = 'Season has ended';
+      } else if (response.status === 401 && isAuthEndpoint) {
         errorMessage = errorMessage.includes('HTTP') 
           ? 'Invalid email or password. Please try again.' 
           : errorMessage;
