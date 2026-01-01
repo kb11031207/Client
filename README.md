@@ -2,7 +2,7 @@
 
 .# Fantasy Football Client
 
-A React TypeScript client application for the SLIAC Fantasy Football platform, built with Redux Toolkit, Material UI, and React Router.
+A React TypeScript client application for the SLIAC Fantasy Football platform, built with Redux Toolkit, Material UI, and React Router.bb
 
 ## 🚀 Quick Start
 
