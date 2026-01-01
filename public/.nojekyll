@@ -1,0 +1,3 @@
+# Prevent Jekyll from processing this directory
+# GitHub Pages uses Jekyll by default, but this is a React SPA that doesn't need it
+

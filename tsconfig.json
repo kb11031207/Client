@@ -14,13 +14,17 @@
     "moduleDetection": "force",
     "noEmit": true,
 
+    /* React JSX */
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
+
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": ["src/pages/ts_files/**/*"]
 }
