@@ -4,6 +4,7 @@ import { Box, Card, CardContent, TextField, Button, Typography, Container } from
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import { loginThunk, clearError } from '../store/slices/authSlice'
 import { useNotification } from '../hooks/useNotification'
+import { sanitizeEmail } from '../utils/sanitize'
 
 /**
  * Login Page
@@ -44,14 +45,17 @@ export function LoginPage() {
     e.preventDefault()
     dispatch(clearError())
 
+    // Sanitize email input
+    const sanitizedEmail = sanitizeEmail(email)
+
     // Validate form
-    if (!email || !password) {
+    if (!sanitizedEmail || !password) {
       showError('Please enter both email and password')
       return
     }
 
-    // Dispatch login thunk
-    const result = await dispatch(loginThunk({ email, password }))
+    // Dispatch login thunk with sanitized email
+    const result = await dispatch(loginThunk({ email: sanitizedEmail, password }))
     
     // Check if login was successful
     if (loginThunk.fulfilled.match(result)) {

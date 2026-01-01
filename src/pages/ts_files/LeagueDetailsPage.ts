@@ -2,6 +2,7 @@ import { authService } from '../../services/auth.service';
 import { router } from '../../utils/router';
 import { leagueService } from '../../services/league.service';
 import { gameweekService } from '../../services/gameweek.service';
+import { escapeHTML } from '../../utils/sanitize';
 
 /**
  * League Details Page
@@ -140,7 +141,7 @@ function renderLeagueDetails(
                 League ID
               </div>
               <div style="font-size: var(--font-size-xl); font-weight: var(--font-weight-bold);">
-                League #${league.id}
+                League #${escapeHTML(league.id)}
               </div>
             </div>
             <div>
@@ -148,7 +149,7 @@ function renderLeagueDetails(
                 Type
               </div>
               <div>
-                <span class="${typeBadgeClass}">${leagueType}</span>
+                <span class="${typeBadgeClass}">${escapeHTML(leagueType)}</span>
               </div>
             </div>
             <div>
@@ -156,7 +157,7 @@ function renderLeagueDetails(
                 Owner
               </div>
               <div style="font-weight: var(--font-weight-medium);">
-                ${league.ownerUsername || `User #${league.owner}`}
+                ${escapeHTML(league.ownerUsername || `User #${league.owner}`)}
               </div>
             </div>
             <div>
@@ -164,7 +165,7 @@ function renderLeagueDetails(
                 Members
               </div>
               <div style="font-size: var(--font-size-xl); font-weight: var(--font-weight-bold);">
-                ${memberCount}
+                ${escapeHTML(memberCount)}
               </div>
             </div>
             ${!league.type ? `
@@ -173,7 +174,7 @@ function renderLeagueDetails(
                   Share League ID
                 </div>
                 <div style="font-size: var(--font-size-lg); font-weight: var(--font-weight-bold); font-family: monospace; word-break: break-all; user-select: all;">
-                  ${league.id}
+                  ${escapeHTML(league.id)}
                 </div>
                 <div class="text-secondary" style="font-size: var(--font-size-xs); margin-top: var(--spacing-xs);">
                   Share this ID with others so they can join your private league.
@@ -206,7 +207,7 @@ function renderLeagueDetails(
       <!-- League Members -->
       <div class="card">
         <div class="card-header">
-          <h2 class="card-title">Members (${memberCount})</h2>
+          <h2 class="card-title">Members (${escapeHTML(memberCount)})</h2>
         </div>
         <div class="card-body">
           ${league.members && league.members.length > 0 ? `
@@ -218,19 +219,19 @@ function renderLeagueDetails(
                 >
                   <div class="flex flex-column">
                     <div style="font-weight: var(--font-weight-medium);">
-                      ${member.username || `User #${member.userId}`}
+                      ${escapeHTML(member.username || `User #${member.userId}`)}
                       ${member.userId === league.owner ? '<span class="badge badge-captain" style="margin-left: var(--spacing-xs);">Owner</span>' : ''}
                     </div>
                     ${member.school ? `
                       <div class="text-secondary" style="font-size: var(--font-size-sm);">
-                        ${member.school}
+                        ${escapeHTML(member.school)}
                       </div>
                     ` : ''}
                   </div>
                   ${isOwner && member.userId !== userId && member.userId !== league.owner ? `
                     <button 
                       class="btn btn-danger btn-sm" 
-                      data-kick-member="${member.userId}"
+                      data-kick-member="${escapeHTML(member.userId)}"
                       title="Remove member"
                     >
                       Remove
@@ -245,7 +246,7 @@ function renderLeagueDetails(
                 >
                   <div class="flex flex-column">
                     <div style="font-weight: var(--font-weight-medium);">
-                      ${league.ownerUsername || `User #${league.owner}`}
+                      ${escapeHTML(league.ownerUsername || `User #${league.owner}`)}
                       <span class="badge badge-captain" style="margin-left: var(--spacing-xs);">Owner</span>
                     </div>
                   </div>
@@ -382,8 +383,8 @@ async function loadGameweeksForStandings(leagueId: number) {
     // Populate dropdown
     gameweekSelect.innerHTML = '<option value="">Select a gameweek...</option>' +
       gameweeks.map((gw: any) => `
-        <option value="${gw.id}" ${gw.id === currentGameweekId ? 'selected' : ''}>
-          Gameweek ${gw.id}${gw.isComplete ? ' (Complete)' : ''}
+        <option value="${escapeHTML(gw.id)}" ${gw.id === currentGameweekId ? 'selected' : ''}>
+          Gameweek ${escapeHTML(gw.id)}${gw.isComplete ? ' (Complete)' : ''}
         </option>
       `).join('');
 
@@ -428,9 +429,9 @@ async function loadStandings(leagueId: number, gameweekId: number) {
           <tbody>
             ${standings.standings.map((entry: any) => `
               <tr>
-                <td style="font-weight: var(--font-weight-bold);">${entry.rank}</td>
-                <td>${entry.username || `User #${entry.userId}`}</td>
-                <td style="font-weight: var(--font-weight-semibold);">${entry.totalPoints}</td>
+                <td style="font-weight: var(--font-weight-bold);">${escapeHTML(entry.rank)}</td>
+                <td>${escapeHTML(entry.username || `User #${entry.userId}`)}</td>
+                <td style="font-weight: var(--font-weight-semibold);">${escapeHTML(entry.totalPoints)}</td>
               </tr>
             `).join('')}
           </tbody>

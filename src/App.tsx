@@ -93,11 +93,16 @@ function AppRoutes() {
 }
 
 function App() {
+  // Get base path from environment variable (matches Vite base config)
+  // Default to '/Client/' for GitHub Pages project deployment
+  // For root deployment, set VITE_BASE=/ in production
+  const basePath = import.meta.env.VITE_BASE || '/Client/'
+  
   return (
     <Provider store={store}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <BrowserRouter>
+        <BrowserRouter basename={basePath}>
           <AppBarComponent />
           <AppRoutes />
           <NotificationSnackbar />

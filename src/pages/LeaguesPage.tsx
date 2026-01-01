@@ -32,9 +32,10 @@ export function LeaguesPage() {
     }
 
     const loadLeagues = async () => {
+      if (!auth.user?.id) return
       try {
         await Promise.all([
-          dispatch(fetchUserLeagues(auth.user!.id)),
+          dispatch(fetchUserLeagues(auth.user.id)),
           dispatch(fetchPublicLeagues())
         ])
       } catch (err: unknown) {

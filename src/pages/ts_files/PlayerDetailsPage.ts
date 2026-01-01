@@ -3,6 +3,7 @@ import { router } from '../../utils/router';
 import { playerService, type PlayerDto } from '../../services/player.service';
 import { gameweekService } from '../../services/gameweek.service';
 import { getPositionName, getPositionAbbr } from '../../utils/squad-validator';
+import { escapeHTML } from '../../utils/sanitize';
 
 /**
  * Player Details Page
@@ -147,23 +148,23 @@ function renderPlayerDetails(player: PlayerDto) {
             <div class="flex flex-center gap-md">
               ${player.pictureUrl ? `
                 <img 
-                  src="${player.pictureUrl}" 
-                  alt="${player.name || 'Player'}" 
+                  src="${escapeHTML(player.pictureUrl)}" 
+                  alt="${escapeHTML(player.name || 'Player')}" 
                   style="width: 80px; height: 80px; border-radius: var(--radius-md); object-fit: cover; border: 2px solid var(--color-border);"
                 >
               ` : `
                 <div 
                   style="width: 80px; height: 80px; border-radius: var(--radius-md); background: var(--color-surface); display: flex; align-items: center; justify-content: center; font-weight: var(--font-weight-bold); font-size: var(--font-size-2xl); border: 2px solid var(--color-border);"
                 >
-                  ${positionAbbr}
+                  ${escapeHTML(positionAbbr)}
                 </div>
               `}
               <div class="flex flex-column" style="flex: 1;">
                 <h2 class="mt-0 mb-sm" style="font-size: var(--font-size-2xl);">
-                  ${player.name || 'Unknown Player'}
+                  ${escapeHTML(player.name || 'Unknown Player')}
                 </h2>
                 <div class="text-secondary" style="font-size: var(--font-size-lg);">
-                  ${player.teamName || 'Unknown Team'} • ${positionName}
+                  ${escapeHTML(player.teamName || 'Unknown Team')} • ${escapeHTML(positionName)}
                 </div>
               </div>
             </div>
@@ -173,7 +174,7 @@ function renderPlayerDetails(player: PlayerDto) {
                   Player Number
                 </div>
                 <div style="font-weight: var(--font-weight-medium); font-size: var(--font-size-lg);">
-                  #${player.playerNum}
+                  #${escapeHTML(player.playerNum)}
                 </div>
               </div>
               <div style="flex: 1; min-width: 150px;">
@@ -181,7 +182,7 @@ function renderPlayerDetails(player: PlayerDto) {
                   Cost
                 </div>
                 <div style="font-weight: var(--font-weight-bold); font-size: var(--font-size-xl);">
-                  £${player.cost.toFixed(1)}m
+                  £${escapeHTML(player.cost.toFixed(1))}m
                 </div>
               </div>
               ${player.school ? `
@@ -190,7 +191,7 @@ function renderPlayerDetails(player: PlayerDto) {
                     School
                   </div>
                   <div style="font-weight: var(--font-weight-medium);">
-                    ${player.school}
+                    ${escapeHTML(player.school)}
                   </div>
                 </div>
               ` : ''}
@@ -246,8 +247,8 @@ async function loadGameweeksForStats(playerId: number) {
     // Populate dropdown
     gameweekSelect.innerHTML = '<option value="">Select a gameweek...</option>' +
       gameweeks.map((gw: any) => `
-        <option value="${gw.id}" ${gw.id === currentGameweekId ? 'selected' : ''}>
-          Gameweek ${gw.id}${gw.isComplete ? ' (Complete)' : ''}
+        <option value="${escapeHTML(gw.id)}" ${gw.id === currentGameweekId ? 'selected' : ''}>
+          Gameweek ${escapeHTML(gw.id)}${gw.isComplete ? ' (Complete)' : ''}
         </option>
       `).join('');
 
@@ -298,7 +299,7 @@ async function loadPlayerStats(playerId: number, gameweekId: number) {
             Points Earned (Gameweek ${gameweekId})
           </div>
           <div style="font-size: var(--font-size-3xl); font-weight: var(--font-weight-bold); color: var(--color-primary);">
-            ${stats.pointsEarned}
+            ${escapeHTML(stats.pointsEarned)}
           </div>
         </div>
 
@@ -314,7 +315,7 @@ async function loadPlayerStats(playerId: number, gameweekId: number) {
                   Minutes Played
                 </div>
                 <div style="font-size: var(--font-size-xl); font-weight: var(--font-weight-bold);">
-                  ${stats.minutesPlayed}
+                  ${escapeHTML(stats.minutesPlayed)}
                 </div>
               </div>
 
@@ -323,7 +324,7 @@ async function loadPlayerStats(playerId: number, gameweekId: number) {
                   Goals
                 </div>
                 <div style="font-size: var(--font-size-xl); font-weight: var(--font-weight-bold); color: var(--color-success);">
-                  ${stats.goals}
+                  ${escapeHTML(stats.goals)}
                 </div>
               </div>
 
@@ -332,7 +333,7 @@ async function loadPlayerStats(playerId: number, gameweekId: number) {
                   Assists
                 </div>
                 <div style="font-size: var(--font-size-xl); font-weight: var(--font-weight-bold); color: var(--color-success);">
-                  ${stats.assists}
+                  ${escapeHTML(stats.assists)}
                 </div>
               </div>
 
@@ -350,7 +351,7 @@ async function loadPlayerStats(playerId: number, gameweekId: number) {
                   Goals Conceded
                 </div>
                 <div style="font-size: var(--font-size-xl); font-weight: var(--font-weight-bold); ${stats.goalsConceded > 0 ? 'color: var(--color-error);' : ''}">
-                  ${stats.goalsConceded}
+                  ${escapeHTML(stats.goalsConceded)}
                 </div>
               </div>
 
@@ -359,7 +360,7 @@ async function loadPlayerStats(playerId: number, gameweekId: number) {
                   Saves
                 </div>
                 <div style="font-size: var(--font-size-xl); font-weight: var(--font-weight-bold);">
-                  ${stats.saves}
+                  ${escapeHTML(stats.saves)}
                 </div>
               </div>
 
@@ -368,7 +369,7 @@ async function loadPlayerStats(playerId: number, gameweekId: number) {
                   Shots
                 </div>
                 <div style="font-size: var(--font-size-xl); font-weight: var(--font-weight-bold);">
-                  ${stats.shots || 0}
+                  ${escapeHTML(stats.shots || 0)}
                 </div>
               </div>
 
@@ -377,7 +378,7 @@ async function loadPlayerStats(playerId: number, gameweekId: number) {
                   Shots on Target
                 </div>
                 <div style="font-size: var(--font-size-xl); font-weight: var(--font-weight-bold);">
-                  ${stats.shotsOnGoal || 0}
+                  ${escapeHTML(stats.shotsOnGoal || 0)}
                 </div>
               </div>
 
@@ -386,7 +387,7 @@ async function loadPlayerStats(playerId: number, gameweekId: number) {
                   Yellow Cards
                 </div>
                 <div style="font-size: var(--font-size-xl); font-weight: var(--font-weight-bold); ${stats.yellowCards > 0 ? 'color: var(--color-warning);' : ''}">
-                  ${stats.yellowCards}
+                  ${escapeHTML(stats.yellowCards)}
                 </div>
               </div>
 
@@ -395,7 +396,7 @@ async function loadPlayerStats(playerId: number, gameweekId: number) {
                   Red Cards
                 </div>
                 <div style="font-size: var(--font-size-xl); font-weight: var(--font-weight-bold); ${stats.redCards > 0 ? 'color: var(--color-error);' : ''}">
-                  ${stats.redCards}
+                  ${escapeHTML(stats.redCards)}
                 </div>
               </div>
             </div>
@@ -415,36 +416,36 @@ async function loadPlayerStats(playerId: number, gameweekId: number) {
                     <div class="flex flex-between flex-center mb-md" style="flex-wrap: wrap; gap: var(--spacing-sm);">
                       <div style="flex: 1; min-width: 200px;">
                         <div style="font-weight: var(--font-weight-bold); font-size: var(--font-size-lg); margin-bottom: var(--spacing-xs);">
-                          ${fixture.homeTeamName || 'Home'} ${fixture.homeScore} - ${fixture.awayScore} ${fixture.awayTeamName || 'Away'}
+                          ${escapeHTML(fixture.homeTeamName || 'Home')} ${escapeHTML(fixture.homeScore)} - ${escapeHTML(fixture.awayScore)} ${escapeHTML(fixture.awayTeamName || 'Away')}
                         </div>
                         <div class="text-secondary" style="font-size: var(--font-size-sm);">
-                          ${new Date(fixture.kickoff).toLocaleDateString()} ${new Date(fixture.kickoff).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                          ${escapeHTML(new Date(fixture.kickoff).toLocaleDateString())} ${escapeHTML(new Date(fixture.kickoff).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }))}
                         </div>
                       </div>
                       <div style="font-weight: var(--font-weight-bold); font-size: var(--font-size-xl); color: var(--color-primary);">
-                        ${fixture.pointsEarned} pts
+                        ${escapeHTML(fixture.pointsEarned)} pts
                       </div>
                     </div>
                     <div class="dashboard-grid" style="grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: var(--spacing-sm); margin-top: var(--spacing-md);">
                       <div>
                         <div class="text-secondary" style="font-size: var(--font-size-xs);">Min</div>
-                        <div style="font-weight: var(--font-weight-semibold);">${fixture.minutesPlayed}</div>
+                        <div style="font-weight: var(--font-weight-semibold);">${escapeHTML(fixture.minutesPlayed)}</div>
                       </div>
                       <div>
                         <div class="text-secondary" style="font-size: var(--font-size-xs);">Goals</div>
-                        <div style="font-weight: var(--font-weight-semibold); color: var(--color-success);">${fixture.goals}</div>
+                        <div style="font-weight: var(--font-weight-semibold); color: var(--color-success);">${escapeHTML(fixture.goals)}</div>
                       </div>
                       <div>
                         <div class="text-secondary" style="font-size: var(--font-size-xs);">Assists</div>
-                        <div style="font-weight: var(--font-weight-semibold); color: var(--color-success);">${fixture.assists}</div>
+                        <div style="font-weight: var(--font-weight-semibold); color: var(--color-success);">${escapeHTML(fixture.assists)}</div>
                       </div>
                       <div>
                         <div class="text-secondary" style="font-size: var(--font-size-xs);">Shots</div>
-                        <div style="font-weight: var(--font-weight-semibold);">${fixture.shots || 0}</div>
+                        <div style="font-weight: var(--font-weight-semibold);">${escapeHTML(fixture.shots || 0)}</div>
                       </div>
                       <div>
                         <div class="text-secondary" style="font-size: var(--font-size-xs);">On Target</div>
-                        <div style="font-weight: var(--font-weight-semibold);">${fixture.shotsOnGoal || 0}</div>
+                        <div style="font-weight: var(--font-weight-semibold);">${escapeHTML(fixture.shotsOnGoal || 0)}</div>
                       </div>
                       ${fixture.cleanSheet ? `
                         <div>
@@ -455,25 +456,25 @@ async function loadPlayerStats(playerId: number, gameweekId: number) {
                       ${fixture.goalsConceded > 0 ? `
                         <div>
                           <div class="text-secondary" style="font-size: var(--font-size-xs);">Goals Against</div>
-                          <div style="font-weight: var(--font-weight-semibold); color: var(--color-error);">${fixture.goalsConceded}</div>
+                          <div style="font-weight: var(--font-weight-semibold); color: var(--color-error);">${escapeHTML(fixture.goalsConceded)}</div>
                         </div>
                       ` : ''}
                       ${fixture.saves > 0 ? `
                         <div>
                           <div class="text-secondary" style="font-size: var(--font-size-xs);">Saves</div>
-                          <div style="font-weight: var(--font-weight-semibold);">${fixture.saves}</div>
+                          <div style="font-weight: var(--font-weight-semibold);">${escapeHTML(fixture.saves)}</div>
                         </div>
                       ` : ''}
                       ${fixture.yellowCards > 0 ? `
                         <div>
                           <div class="text-secondary" style="font-size: var(--font-size-xs);">Yellow</div>
-                          <div style="font-weight: var(--font-weight-semibold); color: var(--color-warning);">${fixture.yellowCards}</div>
+                          <div style="font-weight: var(--font-weight-semibold); color: var(--color-warning);">${escapeHTML(fixture.yellowCards)}</div>
                         </div>
                       ` : ''}
                       ${fixture.redCards > 0 ? `
                         <div>
                           <div class="text-secondary" style="font-size: var(--font-size-xs);">Red</div>
-                          <div style="font-weight: var(--font-weight-semibold); color: var(--color-error);">${fixture.redCards}</div>
+                          <div style="font-weight: var(--font-weight-semibold); color: var(--color-error);">${escapeHTML(fixture.redCards)}</div>
                         </div>
                       ` : ''}
                     </div>

@@ -4,6 +4,7 @@ import { Box, Card, CardContent, TextField, Button, Typography, Container } from
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import { registerThunk, clearError } from '../store/slices/authSlice'
 import { useNotification } from '../hooks/useNotification'
+import { sanitizeUsername, sanitizeEmail, sanitizeText } from '../utils/sanitize'
 
 /**
  * Register Page
@@ -39,12 +40,12 @@ export function RegisterPage() {
     e.preventDefault()
     dispatch(clearError())
 
-    // Validate input
-    const trimmedUsername = username.trim()
-    const trimmedEmail = email.trim()
-    const trimmedSchool = school.trim()
+    // Sanitize and validate input
+    const sanitizedUsername = sanitizeUsername(username)
+    const sanitizedEmail = sanitizeEmail(email)
+    const sanitizedSchool = sanitizeText(school)
 
-    if (trimmedUsername.length < 3 || trimmedUsername.length > 50) {
+    if (sanitizedUsername.length < 3 || sanitizedUsername.length > 50) {
       showError('Username must be between 3 and 50 characters.')
       return
     }
@@ -54,12 +55,12 @@ export function RegisterPage() {
       return
     }
 
-    // Dispatch register thunk
+    // Dispatch register thunk with sanitized inputs
     const result = await dispatch(registerThunk({
-      username: trimmedUsername,
-      email: trimmedEmail,
+      username: sanitizedUsername,
+      email: sanitizedEmail,
       password,
-      school: trimmedSchool || undefined,
+      school: sanitizedSchool || undefined,
     }))
     
     // Check if registration was successful

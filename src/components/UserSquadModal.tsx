@@ -50,7 +50,6 @@ export function UserSquadModal({ open, userId, username, gameweekId, onClose }: 
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [selectedPlayer, setSelectedPlayer] = useState<PlayerDto | null>(null)
-  const [loadingPlayer, setLoadingPlayer] = useState(false)
   const { showError } = useNotification()
 
   const loadSquad = async () => {
@@ -81,14 +80,11 @@ export function UserSquadModal({ open, userId, username, gameweekId, onClose }: 
 
   const handlePlayerClick = async (playerId: number) => {
     try {
-      setLoadingPlayer(true)
       const player = await playerService.getPlayer(playerId) as PlayerDto
       setSelectedPlayer(player)
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'Failed to load player details.'
       showError(message)
-    } finally {
-      setLoadingPlayer(false)
     }
   }
 

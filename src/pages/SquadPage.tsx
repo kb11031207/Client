@@ -21,6 +21,7 @@ import { useNotification } from '../hooks/useNotification'
 import { fetchAllPlayers, searchPlayers, setFilteredPlayers, extractTeams } from '../store/slices/playerSlice'
 import { fetchAllGameweeks, fetchCurrentGameweek } from '../store/slices/gameweekSlice'
 import { fetchSquadForGameweek, createSquad, updateSquad } from '../store/slices/squadSlice'
+import { sanitizeSearchQuery } from '../utils/sanitize'
 
 /**
  * Squad Builder Page
@@ -222,13 +223,16 @@ export function SquadPage() {
       // Determine if we should use API or client-side filtering
       const hasApiFilters = Object.keys(filters).length > 0
       
+      // Sanitize search term
+      const sanitizedSearchTerm = sanitizeSearchQuery(searchTerm)
+      
       if (hasApiFilters) {
         // Use API search with all filters (including sorting)
         const result = await dispatch(searchPlayers(filters))
-        if (result.payload && searchTerm) {
+        if (result.payload && sanitizedSearchTerm) {
           // Apply client-side name search if provided
           const filtered = (result.payload as PlayerDto[]).filter(player => 
-            player.name?.toLowerCase().includes(searchTerm.toLowerCase())
+            player.name?.toLowerCase().includes(sanitizedSearchTerm.toLowerCase())
           )
           dispatch(setFilteredPlayers(filtered))
         }
@@ -236,9 +240,9 @@ export function SquadPage() {
         // Use all players (no filters, no sorting)
         let filtered = players
         // Apply client-side name search if provided
-        if (searchTerm) {
+        if (sanitizedSearchTerm) {
           filtered = players.filter(player => 
-            player.name?.toLowerCase().includes(searchTerm.toLowerCase())
+            player.name?.toLowerCase().includes(sanitizedSearchTerm.toLowerCase())
           )
         }
         dispatch(setFilteredPlayers(filtered))
