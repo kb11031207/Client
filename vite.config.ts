@@ -7,11 +7,7 @@ export default defineConfig({
   // Base path for GitHub Pages deployment
   // Use VITE_BASE environment variable, or default to /Client/ for project pages
   // For root deployment (username.github.io), set VITE_BASE=/ in production
-  base: process.env.VITE_BASE || '/Client/',
-  server: {
-    port: 3000,
-    host: true, // Allow access from network (0.0.0.0)
-    open: true,
-  },
+  base: process.env.VITE_BASE || '/',
+ 
 })
 
