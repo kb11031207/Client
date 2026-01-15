@@ -6,28 +6,28 @@
 
 /* ===== CSS Variables ===== */
 :root {
-  /* Colors - Light Theme */
+  /* Colors - Dark Theme (Forced, consistent across all machines) */
   --color-primary: #646cff;
   --color-primary-hover: #535bf2;
   --color-secondary: #747bff;
   --color-accent: #3178c6;
   
   --color-background: #2a2a2a;
-  --color-surface: #f9f9f9;
-  --color-surface-elevated: #ffffff;
-  --color-border: #e0e0e0;
+  --color-surface: #1a1a1a;
+  --color-surface-elevated: #2a2a2a;
+  --color-border: #404040;
   
-  --color-text-primary: #213547;
-  --color-text-secondary: #666666;
-  --color-text-muted: #888888;
+  --color-text-primary: rgba(255, 255, 255, 0.87);
+  --color-text-secondary: rgba(255, 255, 255, 0.6);
+  --color-text-muted: rgba(255, 255, 255, 0.4);
   
   --color-success: #4caf50;
-  --color-success-bg: #e8f5e9;
-  --color-success-border: #c8e6c9;
+  --color-success-bg: #1b5e20;
+  --color-success-border: #2e7d32;
   
   --color-error: #f44336;
-  --color-error-bg: #ffebee;
-  --color-error-border: #ffcdd2;
+  --color-error-bg: #b71c1c;
+  --color-error-border: #c62828;
   
   --color-warning: #ff9800;
   --color-info: #2196f3;
@@ -77,25 +77,7 @@
   --transition-slow: 300ms;
 }
 
-/* Dark Theme */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-background: #2a2a2a;
-    --color-surface: #1a1a1a;
-    --color-surface-elevated: #2a2a2a;
-    --color-border: #404040;
-    
-    --color-text-primary: rgba(255, 255, 255, 0.87);
-    --color-text-secondary: rgba(255, 255, 255, 0.6);
-    --color-text-muted: rgba(255, 255, 255, 0.4);
-    
-    --color-success-bg: #1b5e20;
-    --color-success-border: #2e7d32;
-    
-    --color-error-bg: #b71c1c;
-    --color-error-border: #c62828;
-  }
-}
+/* Dark theme is now forced as default above, removing system preference detection for consistency */
 
 /* ===== Base Styles ===== */
 * {
@@ -357,15 +339,15 @@ small {
 }
 
 .alert-info {
-  background-color: #e3f2fd;
+  background-color: rgba(33, 150, 243, 0.2);
   color: var(--color-info);
-  border-color: #90caf9;
+  border-color: rgba(33, 150, 243, 0.5);
 }
 
 .alert-warning {
-  background-color: #fff3e0;
+  background-color: rgba(255, 152, 0, 0.2);
   color: var(--color-warning);
-  border-color: #ffb74d;
+  border-color: rgba(255, 152, 0, 0.5);
 }
 
 /* ===== Pages ===== */
@@ -556,7 +538,7 @@ small {
 
 .modal-content {
   background: var(--color-surface);
-  border-radius: var(--border-radius-md);
+  border-radius: var(--radius-md);
   box-shadow: var(--shadow-lg);
   width: 90%;
   max-width: 600px;
@@ -596,7 +578,7 @@ small {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: var(--border-radius-sm);
+  border-radius: var(--radius-sm);
   transition: var(--transition-fast);
 }
 

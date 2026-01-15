@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { squadService, type SquadDto } from '../../services/squad.service'
+import { logoutThunk } from './authSlice'
 
 interface SquadState {
   userSquads: SquadDto[]
@@ -213,6 +214,14 @@ const squadSlice = createSlice({
       .addCase(deleteSquad.rejected, (state, action) => {
         state.isLoading = false
         state.error = action.payload as string
+      })
+
+    // Clear squad state on logout
+    builder
+      .addCase(logoutThunk.fulfilled, (state) => {
+        state.userSquads = []
+        state.currentSquad = null
+        state.error = null
       })
   },
 })
