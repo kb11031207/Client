@@ -64,6 +64,7 @@ export function SquadPage() {
   })
   
   const [saving, setSaving] = useState(false)
+  const [generatingRandom, setGeneratingRandom] = useState(false)
   const [validationErrors, setValidationErrors] = useState<string[]>([])
   
   // Filter state (UI-only, can stay as useState)
@@ -349,6 +350,69 @@ export function SquadPage() {
       viceCaptainId: playerId,
       captainId: prev.captainId === playerId ? null : prev.captainId,
     }))
+  }
+
+  const handleGenerateRandomSquad = async () => {
+    if (!auth.user?.id || !selectedGameweekId) {
+      showError('User ID or gameweek not found')
+      return
+    }
+
+    setGeneratingRandom(true)
+    setValidationErrors([])
+
+    try {
+      // Ensure players are loaded first
+      if (players.length === 0) {
+        await dispatch(fetchAllPlayers())
+        // Wait for players to be available
+        await new Promise(resolve => setTimeout(resolve, 500))
+      }
+      
+      const result = await dispatch(generateRandomSquad({ 
+        userId: auth.user.id, 
+        gameweekId: selectedGameweekId 
+      }))
+      
+      if (generateRandomSquad.fulfilled.match(result)) {
+        const randomSquad = result.payload
+        
+        // Ensure we have fresh players data
+        if (players.length === 0) {
+          await dispatch(fetchAllPlayers())
+          await new Promise(resolve => setTimeout(resolve, 300))
+        }
+        
+        // Map player IDs to player objects
+        // The players variable from the hook should be up-to-date
+        const squadPlayers = randomSquad.playerIds
+          .map(playerId => players.find(p => p.id === playerId))
+          .filter(Boolean) as PlayerDto[]
+        
+        if (squadPlayers.length === randomSquad.playerIds.length) {
+          // Update squad state with random squad
+          setSquadState({
+            players: squadPlayers,
+            starterIds: randomSquad.starterIds,
+            captainId: randomSquad.captainId,
+            viceCaptainId: randomSquad.viceCaptainId,
+            gameweekId: randomSquad.gameweekId,
+            budget: 100,
+          })
+          showSuccess('Random squad generated! Review and save when ready.')
+        } else {
+          showError(`Could not find all players (found ${squadPlayers.length}/${randomSquad.playerIds.length}). Players may still be loading. Please try again in a moment.`)
+        }
+      } else {
+        const errorMessage = result.payload as string || 'Failed to generate random squad'
+        showError(errorMessage)
+      }
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Failed to generate random squad. Please try again.'
+      showError(message)
+    } finally {
+      setGeneratingRandom(false)
+    }
   }
 
   const handleSaveSquad = async () => {
@@ -678,6 +742,25 @@ export function SquadPage() {
             )}
 
             <button
+              onClick={handleGenerateRandomSquad}
+              disabled={generatingRandom || !selectedGameweekId}
+              style={{
+                width: '100%',
+                padding: '0.75rem',
+                background: generatingRandom || !selectedGameweekId ? 'var(--color-text-muted)' : 'var(--color-secondary)',
+                color: 'white',
+                border: 'none',
+                borderRadius: 'var(--radius-sm)',
+                fontSize: 'var(--font-size-base)',
+                fontWeight: 'var(--font-weight-medium)',
+                cursor: generatingRandom || !selectedGameweekId ? 'not-allowed' : 'pointer',
+                marginTop: '1rem',
+                marginBottom: '0.5rem'
+              }}
+            >
+              {generatingRandom ? 'Generating...' : '🎲 Generate Random Squad'}
+            </button>
+            <button
               onClick={handleSaveSquad}
               disabled={saving}
               style={{
@@ -690,7 +773,7 @@ export function SquadPage() {
                 fontSize: 'var(--font-size-base)',
                 fontWeight: 'var(--font-weight-medium)',
                 cursor: saving ? 'not-allowed' : 'pointer',
-                marginTop: '1rem'
+                marginTop: '0.5rem'
               }}
             >
               {saving ? 'Saving...' : 'Save Squad'}

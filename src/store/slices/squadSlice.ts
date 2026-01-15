@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { squadService, type SquadDto } from '../../services/squad.service'
+import { squadService, type SquadDto, type CreateSquadDto } from '../../services/squad.service'
 import { logoutThunk } from './authSlice'
 
 interface SquadState {
@@ -90,6 +90,19 @@ export const deleteSquad = createAsyncThunk<number, number>(
       return id
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : 'Failed to delete squad'
+      return rejectWithValue(message)
+    }
+  }
+)
+
+export const generateRandomSquad = createAsyncThunk<CreateSquadDto, { userId: number; gameweekId: number }>(
+  'squads/generateRandom',
+  async ({ userId, gameweekId }, { rejectWithValue }) => {
+    try {
+      const randomSquad = await squadService.generateRandomSquad(userId, gameweekId)
+      return randomSquad
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : 'Failed to generate random squad'
       return rejectWithValue(message)
     }
   }

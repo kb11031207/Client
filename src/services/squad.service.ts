@@ -28,6 +28,15 @@ export interface SquadDto {
   totalPoints?: number
 }
 
+// CreateSquadDto interface for creating/updating squads
+export interface CreateSquadDto {
+  gameweekId: number
+  playerIds: number[]
+  starterIds: number[]
+  captainId: number
+  viceCaptainId: number
+}
+
 export class SquadService {
   /**
    * Get all squads for a user
@@ -83,6 +92,16 @@ export class SquadService {
    */
   async deleteSquad(id: number) {
     return apiClient.delete(`/api/Squads/${id}`);
+  }
+  
+  /**
+   * Generate a random squad for a gameweek
+   * @param userId User ID
+   * @param gameweekId Gameweek ID
+   * @returns CreateSquadDto with randomly selected players
+   */
+  async generateRandomSquad(userId: number, gameweekId: number): Promise<CreateSquadDto> {
+    return apiClient.post(`/api/Squads/user/${userId}/random/gameweek/${gameweekId}`, {}) as Promise<CreateSquadDto>;
   }
 }
 
