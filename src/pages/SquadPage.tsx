@@ -20,7 +20,7 @@ import { PlayerStatsModal } from '../components/PlayerStatsModal.tsx'
 import { useNotification } from '../hooks/useNotification'
 import { fetchAllPlayers, searchPlayers, setFilteredPlayers, extractTeams } from '../store/slices/playerSlice'
 import { fetchAllGameweeks, fetchCurrentGameweek } from '../store/slices/gameweekSlice'
-import { fetchSquadForGameweek, createSquad, updateSquad } from '../store/slices/squadSlice'
+import { fetchSquadForGameweek, createSquad, updateSquad, generateRandomSquad } from '../store/slices/squadSlice'
 import { sanitizeSearchQuery } from '../utils/sanitize'
 
 /**
@@ -358,6 +358,9 @@ export function SquadPage() {
       return
     }
 
+    const userId = auth.user.id
+    const gameweekId = selectedGameweekId
+
     setGeneratingRandom(true)
     setValidationErrors([])
 
@@ -370,8 +373,8 @@ export function SquadPage() {
       }
       
       const result = await dispatch(generateRandomSquad({ 
-        userId: auth.user.id, 
-        gameweekId: selectedGameweekId 
+        userId, 
+        gameweekId 
       }))
       
       if (generateRandomSquad.fulfilled.match(result)) {
@@ -386,7 +389,7 @@ export function SquadPage() {
         // Map player IDs to player objects
         // The players variable from the hook should be up-to-date
         const squadPlayers = randomSquad.playerIds
-          .map(playerId => players.find(p => p.id === playerId))
+          .map((playerId: number) => players.find(p => p.id === playerId))
           .filter(Boolean) as PlayerDto[]
         
         if (squadPlayers.length === randomSquad.playerIds.length) {
