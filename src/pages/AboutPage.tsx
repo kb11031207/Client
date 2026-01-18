@@ -43,9 +43,12 @@ export function AboutPage() {
             tracking players, managing your squad, and competing in leagues. Whether you're a casual fan or a 
             strategic manager, this platform provides all the tools you need to build and manage your fantasy team.
           </Typography>
-          <Typography variant="body1">
+          <Typography variant="body1" paragraph>
             Get started by browsing players and fixtures, or create an account to build your squad and join leagues 
             to compete with others.
+          </Typography>
+          <Typography variant="body2" color="text.secondary" sx={{ mt: 2, fontStyle: 'italic' }}>
+            <strong>Note:</strong> This platform is just for fun! Enjoy the friendly competition and enjoy managing your fantasy team.
           </Typography>
         </CardContent>
       </Card>
@@ -316,10 +319,13 @@ export function AboutPage() {
             Built with modern web technologies, the platform provides a seamless experience for managing 
             your team, tracking performance, and competing with others.
           </Typography>
-          <Typography variant="body1">
+          <Typography variant="body1" paragraph>
             Whether you're following your favorite players, building the ultimate squad, or competing for 
             the top spot in your league, this platform provides all the tools and information you need 
             for an engaging fantasy football experience.
+          </Typography>
+          <Typography variant="body2" color="text.secondary" sx={{ mt: 2, fontStyle: 'italic' }}>
+            <strong>Note:</strong> This platform is just for fun! Enjoy the friendly competition and enjoy managing your fantasy team.
           </Typography>
         </CardContent>
       </Card>
