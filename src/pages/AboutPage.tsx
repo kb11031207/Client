@@ -217,12 +217,73 @@ export function AboutPage() {
                 </Typography>
               </AccordionSummary>
               <AccordionDetails>
-                <Typography variant="body2" color="text.secondary">
-                  Points are awarded based on player performance in real matches. Players earn points for goals, 
-                  assists, clean sheets, saves, and other statistical achievements. Points can also be deducted 
-                  for yellow cards, red cards, and goals conceded (for defensive players). Check individual player 
-                  stats on the Players page to see how points are calculated for each position.
-                </Typography>
+                <Box>
+                  <Typography variant="body2" color="text.secondary" paragraph>
+                    Points are awarded based on player performance in real matches. The point system varies by position. 
+                    Check individual player stats on the Players page to see detailed performance metrics.
+                  </Typography>
+
+                  <Divider sx={{ my: 2 }} />
+
+                  <Typography variant="subtitle2" fontWeight="bold" gutterBottom sx={{ mt: 2 }}>
+                    Goals by Position
+                  </Typography>
+                  <Box component="ul" sx={{ pl: 2, mb: 2 }}>
+                    <Typography component="li" variant="body2" color="text.secondary">
+                      <strong>Forward:</strong> 5 points per goal
+                    </Typography>
+                    <Typography component="li" variant="body2" color="text.secondary">
+                      <strong>Midfielder:</strong> 6 points per goal
+                    </Typography>
+                    <Typography component="li" variant="body2" color="text.secondary">
+                      <strong>Defender:</strong> 8 points per goal
+                    </Typography>
+                    <Typography component="li" variant="body2" color="text.secondary">
+                      <strong>Goalkeeper:</strong> 8 points per goal
+                    </Typography>
+                  </Box>
+
+                  <Typography variant="subtitle2" fontWeight="bold" gutterBottom sx={{ mt: 2 }}>
+                    Other Positive Actions
+                  </Typography>
+                  <Box component="ul" sx={{ pl: 2, mb: 2 }}>
+                    <Typography component="li" variant="body2" color="text.secondary">
+                      <strong>Assist:</strong> 3 points (all positions)
+                    </Typography>
+                    <Typography component="li" variant="body2" color="text.secondary">
+                      <strong>Clean Sheet:</strong> 4 points
+                    </Typography>
+                    <Typography component="li" variant="body2" color="text.secondary">
+                      <strong>Goalkeeper Saves Bonus:</strong> 1 point per 3 saves (minimum 3 saves required)
+                    </Typography>
+                    <Typography component="li" variant="body2" color="text.secondary">
+                      <strong>Full Match (90 minutes):</strong> 2 points
+                    </Typography>
+                    <Typography component="li" variant="body2" color="text.secondary">
+                      <strong>Partial Match:</strong> 1 point
+                    </Typography>
+                  </Box>
+
+                  <Typography variant="subtitle2" fontWeight="bold" gutterBottom sx={{ mt: 2 }}>
+                    Negative Actions (Point Deductions)
+                  </Typography>
+                  <Box component="ul" sx={{ pl: 2, mb: 2 }}>
+                    <Typography component="li" variant="body2" color="text.secondary">
+                      <strong>Yellow Card:</strong> -1 point
+                    </Typography>
+                    <Typography component="li" variant="body2" color="text.secondary">
+                      <strong>Red Card:</strong> -3 points
+                    </Typography>
+                    <Typography component="li" variant="body2" color="text.secondary">
+                      <strong>Goal Conceded:</strong> -1 point per goal conceded
+                    </Typography>
+                  </Box>
+
+                  <Typography variant="body2" color="text.secondary" sx={{ mt: 2, fontStyle: 'italic' }}>
+                    Note: Points are calculated automatically based on match statistics. Captain points are doubled, 
+                    and vice-captain points are used if the captain doesn't play.
+                  </Typography>
+                </Box>
               </AccordionDetails>
             </Accordion>
 
@@ -235,7 +296,7 @@ export function AboutPage() {
               <AccordionDetails>
                 <Typography variant="body2" color="text.secondary">
                   Squad changes can typically be made before a gameweek starts. Once a gameweek begins, your squad 
-                  is locked for that period. Make sure to review and finalize your squad before the deadline to 
+                  is locked for that period but for now you can change your squad at any time since we are in testing mode. Make sure to review and finalize your squad before the deadline to 
                   maximize your points potential.
                 </Typography>
               </AccordionDetails>

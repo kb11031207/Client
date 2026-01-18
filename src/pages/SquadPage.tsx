@@ -461,7 +461,7 @@ export function SquadPage() {
       }
 
       // Check if squad exists (update) or create new
-      if (currentSquad && currentSquad.id) {
+      if (currentSquad && currentSquad.id && currentSquad.gameweekId ===squadState.gameweekId)  {
         const result = await dispatch(updateSquad({ id: currentSquad.id, squadData }))
         if (updateSquad.fulfilled.match(result)) {
           showSuccess('Squad saved successfully!')
