@@ -36,11 +36,6 @@ export function AppBarComponent() {
     setMobileOpen(!mobileOpen)
   }
 
-  // Don't show AppBar on login/register pages when not authenticated, but show it on players page
-  if (!isAuthenticated && (location.pathname === '/login' || location.pathname === '/register')) {
-    return null
-  }
-
   // Public routes (visible to everyone)
   const publicRoutes = [
     { path: '/players', label: 'Players' },

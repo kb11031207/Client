@@ -327,6 +327,19 @@ export function AboutPage() {
           <Typography variant="body2" color="text.secondary" sx={{ mt: 2, fontStyle: 'italic' }}>
             <strong>Note:</strong> This platform is just for fun! Enjoy the friendly competition and enjoy managing your fantasy team.
           </Typography>
+          <Typography variant="body2" color="text.secondary" sx={{ mt: 1, fontStyle: 'italic' }}>
+            <strong>Data Source:</strong> All data used in this platform was publicly available and obtained from the{' '}
+            <MuiLink 
+              href="https://sliac.org/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              color="primary"
+              sx={{ textDecoration: 'none', '&:hover': { textDecoration: 'underline' } }}
+            >
+              SLIAC website
+            </MuiLink>
+            .
+          </Typography>
         </CardContent>
       </Card>
 
