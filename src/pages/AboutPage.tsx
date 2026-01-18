@@ -40,7 +40,7 @@ export function AboutPage() {
           </Typography>
           <Typography variant="body1" paragraph>
             The SLIAC Fantasy Football platform is a fantasy sports management platform designed for 
-            tracking players, managing your squad, and competing in leagues. Whether you're a casual fan or a 
+            tracking players, managing your squad, and competing in leagues using data from the SLIAC mens D3 soccer. Whether you're a casual fan or a 
             strategic manager, this platform provides all the tools you need to build and manage your fantasy team.
           </Typography>
           <Typography variant="body1" paragraph>
@@ -315,7 +315,7 @@ export function AboutPage() {
             About This Platform
           </Typography>
           <Typography variant="body1" paragraph>
-            The SLIAC Fantasy Football platform is designed to bring fantasy sports management to life. 
+            The SLIAC Fantasy Football platform is designed to bring fantasy sports management from SLIAC mens D3 soccer to life. 
             Built with modern web technologies, the platform provides a seamless experience for managing 
             your team, tracking performance, and competing with others.
           </Typography>
