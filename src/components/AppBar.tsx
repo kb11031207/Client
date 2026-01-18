@@ -89,8 +89,18 @@ export function AppBarComponent() {
           </IconButton>
           <Typography
             variant="h6"
-            component="div"
-            sx={{ flexGrow: 0, mr: 4, fontWeight: 'bold' }}
+            component={Link}
+            to={isAuthenticated ? '/dashboard' : '/login'}
+            sx={{ 
+              flexGrow: 0, 
+              mr: 4, 
+              fontWeight: 'bold',
+              textDecoration: 'none',
+              color: 'inherit',
+              '&:hover': {
+                opacity: 0.8
+              }
+            }}
           >
             Fantasy Football
           </Typography>
