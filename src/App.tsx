@@ -96,7 +96,7 @@ function App() {
   // Get base path from environment variable (matches Vite base config)
   // Default to '/Client/' for GitHub Pages project deployment
   // For root deployment, set VITE_BASE=/ in production
-  const basePath = import.meta.env.VITE_BASE || '/Client/'
+  const basePath = import.meta.env.VITE_BASE || '/'
   
   return (
     <Provider store={store}>
