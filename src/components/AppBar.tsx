@@ -137,9 +137,14 @@ export function AppBarComponent() {
               Logout
             </Button>
           ) : (
-            <Button color="inherit" component={Link} to="/login">
-              Login
-            </Button>
+            <>
+              <Button color="inherit" component={Link} to="/login">
+                Login
+              </Button>
+              <Button color="inherit" component={Link} to="/register" variant="outlined" sx={{ ml: 1, borderColor: 'rgba(255, 255, 255, 0.5)' }}>
+                Register
+              </Button>
+            </>
           )}
         </Box>
       </Toolbar>

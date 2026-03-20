@@ -169,6 +169,23 @@ export function AboutPage() {
             <Accordion>
               <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                 <Typography variant="subtitle1" fontWeight="medium">
+                  Is there a demo account I can use?
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Typography variant="body2" color="text.secondary">
+                  Yes! If you want to explore the platform without creating an account, you can use our demo credentials:
+                  <br /><br />
+                  <strong>Email:</strong> demouser@fantasy.com
+                  <br />
+                  <strong>Password:</strong> 12345678
+                </Typography>
+              </AccordionDetails>
+            </Accordion>
+
+            <Accordion>
+              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                <Typography variant="subtitle1" fontWeight="medium">
                   How do I get started?
                 </Typography>
               </AccordionSummary>

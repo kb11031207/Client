@@ -148,6 +148,17 @@ export function LoginPage() {
                 </Link>
               </Typography>
             </Box>
+            <Box sx={{ textAlign: 'center', mt: 3, p: 2, bgcolor: 'primary.light', borderRadius: 1, color: 'primary.contrastText' }}>
+              <Typography variant="subtitle2" fontWeight="bold">
+                Demo Account:
+              </Typography>
+              <Typography variant="body2">
+                Email: demouser@fantasy.com
+              </Typography>
+              <Typography variant="body2">
+                Password: 12345678
+              </Typography>
+            </Box>
           </CardContent>
         </Card>
       </Box>
